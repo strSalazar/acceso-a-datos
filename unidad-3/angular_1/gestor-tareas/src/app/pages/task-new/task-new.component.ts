@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TasksService } from '../../services/tasks.service';
+import { TasksApiService } from '../../services/tasks-api.service';
 
 @Component({
   selector: 'app-task-new',
@@ -11,27 +11,36 @@ import { TasksService } from '../../services/tasks.service';
   styleUrl: './task-new.component.css',
 })
 export class TaskNewComponent {
-  form: any;
+
+form: any;
+
   constructor(
     private fb: FormBuilder,
-    private tasks: TasksService,
+    private tasksService: TasksApiService,
     private router: Router
   ) {
-
     this.form = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(3)]],
       descripcion: [''],
       completada: [false],
-    });
-  }
+    }); }
 
   save() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    this.tasks.add(this.form.getRawValue());
-    this.router.navigateByUrl('/tareas');
+
+    const newTask = this.form.getRawValue() as any;
+
+    this.tasksService.create(newTask).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/tareas');
+      },
+      error: (err) => {
+        console.error('Error al crear tarea', err);
+      }
+    });
   }
 
   cancel() {
