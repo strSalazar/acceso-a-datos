@@ -4,6 +4,7 @@
 
 export function isValidISODate(iso: string): boolean {
   // regex yyyy-mm-dd + Date válida + conserva componentes (evita 2026-02-30)
+  
   throw new Error("TODO");
 }
 
