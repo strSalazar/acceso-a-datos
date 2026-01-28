@@ -8,15 +8,30 @@ export type AdminTask = Task & { adminOnly: true };
 
 export function makeAdminTask(task: Task): AdminTask {
   // devuelve task + adminOnly=true (sin mutar task original)
-  throw new Error("TODO");
+  return {
+    ...task,
+    adminOnly: true,
+  };
 }
 
 export function buildAuthHeaders(token: string): Record<string, string> {
   // { Authorization: "Bearer <token>", "Content-Type": "application/json" } token trim no vacío
-  throw new Error("TODO");
+  const trimmed = token.trim();
+  if (!trimmed) {
+    throw new Error("Token cannot be empty");
+  }
+  return {
+    Authorization: `Bearer ${trimmed}`,
+    "Content-Type": "application/json",
+  };
 }
 
-export function groupByCompleted(tasks: Task[]): Record<"done" | "pending", Task[]> {
+export function groupByCompleted(
+  tasks: Task[],
+): Record<"done" | "pending", Task[]> {
   // retorna { done: [...], pending: [...] } (arrays nuevos)
-  throw new Error("TODO");
+  return {
+    done: tasks.filter((task) => task.completed),
+    pending: tasks.filter((task) => !task.completed),
+  };
 }
